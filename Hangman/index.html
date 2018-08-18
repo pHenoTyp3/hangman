@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Hangman</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="Assets/css/reset.css">
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css" integrity="sha384-Smlep5jCw/wG7hdkwQ/Z5nLIefveQRIY9nfy6xoR1uRYBtpZgI6339F5dgvm/e9B"
+        crossorigin="anonymous">
+    <link rel="stylesheet" href="Assets/css/style.css">
+
+</head>
+
+
+<body>
+
+
+    <div id="container">
+        <h1>Hangman</h1>
+        <hr>
+        <div id="container">
+            <div id="hangman">
+
+            </div>
+        </div>
+
+        <div id="chosen"></div>
+        <div id="wordspaces"></div>
+        <div id="win-counter"></div>
+        <div id="lives"></div>
+        <button id="reset">New Game</button>
+    </div>
+
+</body>
+<script>
+    var words = ["apple", "joe", "muffin", "teapot", "canada", "nepal", "holiday", "metaphor", "universe"]
+    reset()
+    var compword;
+    var chosenword;
+    var guessedletter;
+    var lives;
+    var chosenletter;
+    var wins;
+
+
+    function reset() {
+        newword()
+        wins = 0
+        $("#win-counter").text(wins)
+        $("#lives").text("Lives left: " + lives)
+        $("#hangman").empty()
+    }
+
+    function newword() {
+
+        compword = words[Math.floor(Math.random() * 9)]
+        console.log(compword)
+        chosenword = compword.split("")
+        guessedletter = [];
+        chosenletter = [];
+        $("#wordspaces").text(guessedletter)
+        $("#chosen").text("you guessed " + chosenletter)
+        $("#win-counter").html(wins)
+        for (var i = 0; i < compword.length; i++) {
+            guessedletter.push(" _ ")
+        }
+        lives = 10;
+        $("#hangman").empty()
+        $("#lives").text("Lives left: " + lives)
+
+
+
+    }
+
+    console.log(guessedletter)
+
+    console.log(chosenword)
+    document.onkeyup = function (x) {
+        var userinput = x.key
+        var inWord = false;
+
+        for (var i = 0; i < chosenword.length; i++) {
+            if (userinput === chosenword[i]) {
+                inWord = true;
+                guessedletter[i] = chosenword[i]
+                console.log(guessedletter)
+            }
+        }
+        $("#wordspaces").text(guessedletter)
+        //////new
+        if (chosenword.toString() === guessedletter.toString()) {
+            alert("You win!");
+            wins++;
+            document.getElementById("win-counter").innerHTML = wins;
+            newword()
+        }
+        ///////new end
+        // new game button
+        $("#reset").on("click", function () {
+            reset()
+        })
+
+        if (inWord) {
+            console.log("yeah")
+        } else {
+            chosenletter.push(userinput)
+            console.log(chosenletter)
+            $("#chosen").text("you guessed " + chosenletter)
+            lives-- == $("#lives")
+            if (lives === 8) {
+                ///hangmancode
+                var hangman = $("<img>")
+                hangman.attr("src", "Assets/images/Head.jpg")
+                $("#hangman").append(hangman)
+                //hangmanend
+            } else if (lives === 6) {
+                var hangman = $("<img>")
+                hangman.attr("src", "Assets/images/Body.jpg")
+                $("#hangman").append(hangman)
+            } else if (lives === 5) {
+                var hangman = $("<img>")
+                hangman.attr("src", "Assets/images/leftleg.jpg").css("display", "inline")
+                $("#hangman").append(hangman)
+            } else if (lives === 3) {
+                var hangman = $("<img>")
+                hangman.attr("src", "Assets/images/rightleg.jpg").css("display", "inline")
+                $("#hangman").append(hangman)
+            } else if (lives === 5) {
+                var hangman = $("<img>")
+                hangman.attr("src", "Assets/images/rightarm.jpg")
+                $("#hangman").append(hangman)
+            } else if (lives === 5) {
+                var hangman = $("<img>")
+                hangman.attr("src", "leftarm.jpg")
+                $("#hangman").append(hangman)
+            } else if (lives === 0) {
+                console.log(lives)
+                reset()
+                wins = 0
+            }
+            $("#lives").text("Lives Left: " + lives)
+        }
+
+    }
+    //i have no idea how to line up the images correctly, i did my best with paint
+    //not sure how to place the images inline using span, & etc
+
+
+
+</script>
+
+</html>
